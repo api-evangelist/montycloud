@@ -1,0 +1,183 @@
+generated: '2026-08-26'
+method: derived
+source: pypi:day2@0.5.0 (day2/models/*.py, day2/resources/*.py)
+note: >-
+  Derived from the Pydantic models and endpoint paths in MontyCloud's own published Python SDK.
+  MontyCloud publishes no OpenAPI and no object reference, so this is the closest thing to a
+  machine-readable schema for the DAY2 API that exists in public. Relationships are read from the
+  URL nesting and from id-reference fields on the models — not inferred beyond them.
+root: Tenant
+identifiers:
+  style: UUID
+  note: >-
+    Tenant ids are UUIDs (the SDK's own example is 123e4567-e89b-12d3-a456-426614174000). No typed
+    id prefixes are used.
+entities:
+  - name: Tenant
+    path: /tenants
+    detail_path: /tenants/{tenant_id}
+    description: >-
+      The multi-tenant root. For an MSP a tenant is a customer; for an enterprise it is an
+      environment. Every other resource hangs off a tenant.
+    fields: [ID, Name, Description, ParentTenantId, CreatedAt, CreatedBy, ModifiedAt, ModifiedBy,
+              Owner, OwnerId, DocumentUrl, CategoryId, Feature, TenantType, OptionalFeatures]
+    operations: [list_tenants, get_tenant, create_tenant, mark_for_deletion, list_accounts, list_categories]
+  - name: TenantCategory
+    path: /tenants/categories
+    description: Classification applied to tenants.
+    operations: [list_categories]
+  - name: User
+    path: /tenants/{tenant_id}/users
+    description: A DAY2 platform user. API keys are minted against a user identity.
+    operations: [list_users, get_user, create_user]
+  - name: Role
+    path: /roles
+    description: RBAC role assignable to users; governs both console and API permissions.
+    operations: [list_roles]
+  - name: Account
+    path: /tenants/{tenant_id}/accounts
+    description: A connected cloud account (AWS or Azure) inside a tenant.
+    operations: [list_accounts, get_account_count, get_onboarding_template, list_region_status, connect_regions]
+    sub_resources:
+      - /tenants/{tenant_id}/accounts/aws/onboarding-template
+      - /tenants/{tenant_id}/accounts/azure/onboarding-template
+      - /tenants/{tenant_id}/accounts/count
+      - /tenants/{tenant_id}/accounts/{account_id}/region-status
+      - /tenants/{tenant_id}/accounts/{account_id}/connect-regions
+  - name: Region
+    path: /tenants/{tenant_id}/resources/regions
+    description: Cloud region available to a tenant, with a connection status per account.
+  - name: ResourceType
+    path: /tenants/{tenant_id}/resources/resource-types
+    description: A cloud resource class MontyCloud can discover, per cloud provider.
+  - name: Resource
+    path: /tenants/{tenant_id}/resources/
+    description: A discovered cloud resource in the tenant inventory.
+    filters: [AccountNumber, AccountNumbers, RegionCode, RegionCodes, ResourceId, ResourceName, Environments, Projects]
+  - name: InventorySummary
+    path: /tenants/{tenant_id}/resources/inventory-summary
+    description: Aggregated inventory rolled up by account number, region and resource type.
+    projections: [InventorySummaryByAccountNumber, InventorySummaryByRegion, InventorySummaryByResourceType]
+  - name: Assessment
+    path: /tenants/{tenant_id}/assessments/
+    detail_path: /tenants/{tenant_id}/assessments/{assessment_id}
+    description: An AWS Well-Architected Framework Review against a scoped workload.
+    inputs: [Name, Description, ReviewOwner, Scope, Lenses]
+    operations: [list_assessments, get_assessment, create_assessment, run_assessment,
+                 generate_report, list_assessments_across_tenants]
+  - name: Question
+    path: /tenants/{tenant_id}/assessments/{assessment_id}/questions
+    detail_path: /tenants/{tenant_id}/assessments/{assessment_id}/questions/{question_id}
+    description: A Well-Architected question within a pillar; answered with choices.
+    operations: [list_questions, get_question, answer_question]
+  - name: Finding
+    path: /tenants/{tenant_id}/assessments/{assessment_id}/findings
+    description: A risk/finding produced by running an assessment.
+  - name: Schedule
+    path: /tenants/{tenant_id}/assessments/{assessment_id}/schedules
+    detail_path: /tenants/{tenant_id}/assessments/{assessment_id}/schedules/{schedule_id}
+    description: Recurring execution of an assessment; status togglable.
+    operations: [create_schedule, get_schedule, list_schedules, update_schedule, update_schedule_status, delete_schedule]
+  - name: AzureAssessment
+    path: /tenants/{tenant_id}/azure/azure-wafr/assessments
+    description: The Azure Well-Architected equivalent of Assessment.
+    operations: [list_assessments, create_assessment, list_findings]
+  - name: ComplianceBotFinding
+    path: /tenants/{tenant_id}/bots/compliance/findings
+    description: A finding raised by a DAY2 compliance bot.
+    related: [/bots/compliance/resource-types, /bots/compliance/policy-groups]
+  - name: Policy
+    path: /tenants/{tenant_id}/bots/compliance/policy-groups
+    description: A grouping of compliance policies a bot evaluates.
+  - name: Cost
+    path: /tenants/{tenant_id}/cost/cost-by-charge-type
+    description: Tenant spend decomposed by AWS charge type.
+  - name: Project
+    path: /tenants/{tenant_id}/projects
+    description: A DAY2 project grouping, with a request queue at /projects/requests.
+  - name: MapProject
+    path: /tenants/{tenant_id}/map-projects
+    detail_path: /tenants/{tenant_id}/map-projects/{map_project_id}
+    description: An AWS Migration Acceleration Program project, with attributed resources and services.
+    sub_resources:
+      - /tenants/{tenant_id}/map-projects/{map_project_id}/resources
+      - /tenants/{tenant_id}/map-projects/{map_project_id}/services
+  - name: Report
+    path: /tenants/{tenant_id}/reports/
+    detail_path: /tenants/{tenant_id}/reports/{report_id}
+    description: A generated report; downloadable via a signed URL.
+    sub_resources:
+      - /tenants/{tenant_id}/reports/{report_id}/download-url
+relationships:
+  - from: Tenant
+    to: Tenant
+    type: has_many
+    via: ParentTenantId
+    note: tenants can nest under a parent tenant
+  - from: Tenant
+    to: User
+    type: has_many
+    via: path nesting
+  - from: Tenant
+    to: Account
+    type: has_many
+    via: path nesting
+  - from: Tenant
+    to: Resource
+    type: has_many
+    via: path nesting
+  - from: Tenant
+    to: Assessment
+    type: has_many
+    via: path nesting
+  - from: Tenant
+    to: Report
+    type: has_many
+    via: path nesting
+  - from: Tenant
+    to: MapProject
+    type: has_many
+    via: path nesting
+  - from: Tenant
+    to: Project
+    type: has_many
+    via: path nesting
+  - from: Tenant
+    to: TenantCategory
+    type: belongs_to
+    via: CategoryId
+  - from: Tenant
+    to: User
+    type: belongs_to
+    via: OwnerId
+  - from: Account
+    to: Region
+    type: has_many
+    via: /accounts/{account_id}/region-status
+  - from: Assessment
+    to: Question
+    type: has_many
+    via: path nesting
+  - from: Assessment
+    to: Finding
+    type: has_many
+    via: path nesting
+  - from: Assessment
+    to: Schedule
+    type: has_many
+    via: path nesting
+  - from: Assessment
+    to: Report
+    type: has_many
+    via: generate_report
+  - from: MapProject
+    to: Resource
+    type: has_many
+    via: /map-projects/{map_project_id}/resources
+  - from: ComplianceBotFinding
+    to: Policy
+    type: belongs_to
+    via: policy group
+entity_count: 19
+operation_count: 47
+path_count: 41

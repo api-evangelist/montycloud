@@ -1,0 +1,75 @@
+generated: '2026-08-26'
+method: derived
+source: pypi:day2@0.5.0 (day2/exceptions.py, day2/client/base.py, day2/resources/tenant.py)
+note: >-
+  MontyCloud publishes no public error reference. This catalog is derived from the status-code to
+  exception mapping in MontyCloud's own published Python SDK, which is a faithful statement of how
+  the DAY2 API signals failure. Titles and remediation are taken from the SDK docstrings; nothing
+  is invented.
+format: vendor-json
+rfc9457: false
+envelope:
+  media_type: application/json
+  shape: '{"Message": "<message>"}'
+  message_field: Message
+  correlation_header: x-request-id
+  fallback: >-
+    When a response body is not JSON, the SDK synthesizes {"Message": "<raw response text>"}, so a
+    non-JSON gateway/WAF error still surfaces as a Message.
+problem_types:
+  - status: 400
+    name: ValidationError
+    title: Request validation failed
+    detail: Required fields missing or invalid.
+    remediation: Correct the request payload or path/query parameters and retry.
+  - status: 400
+    name: TenantDeletionPrerequisitesNotMet
+    title: Tenant deletion prerequisites not met
+    detail: >-
+      A tenant mark-for-deletion request returns 400 with an additional `Prerequisites` object
+      enumerating which checks are blocking — remaining Accounts, Users, or SSO registrations.
+    remediation: >-
+      Offboard remaining accounts, delete users and remove SSO configurations, then retry.
+    envelope_extension: Prerequisites
+    docs: https://support.montycloud.com/support/solutions/articles/62000237759-mark-a-tenant-for-deletion
+  - status: 401
+    name: AuthenticationError
+    title: Authentication failed
+    detail: The x-api-key / Authorization secret pair was missing, malformed, or rejected.
+    remediation: Re-run `day2 auth configure` or reissue the API key + secret in the DAY2 platform.
+  - status: 403
+    name: AuthenticationError
+    title: Not permitted
+    detail: >-
+      Authenticated, but the DAY2 RBAC role attached to the key does not permit the operation or
+      the tenant. The SDK raises the same AuthenticationError class as 401.
+    remediation: Grant the required role/tenant assignment to the user the key belongs to.
+  - status: 404
+    name: ResourceNotFoundError
+    title: Resource not found
+    detail: The tenant, assessment, report, project or other addressed resource does not exist.
+    remediation: Verify the tenant id and resource id; ids are UUIDs.
+  - status: 429
+    name: RateLimitError
+    title: Rate limit exceeded
+    detail: API Gateway rate limiting rejected the request.
+    remediation: Back off and retry; the SDK retries with exponential backoff (2s to 10s, 3 attempts).
+    see: rate-limits/montycloud-rate-limits.yml
+  - status: 4xx
+    name: ClientError
+    title: Client error
+    detail: Any other 4xx not matched above.
+    remediation: Inspect Message and x-request-id, then contact support with the request id.
+  - status: 5xx
+    name: ServerError
+    title: Server error
+    detail: Internal error in the DAY2 platform.
+    remediation: Retry with backoff; if persistent, open a ticket at support.montycloud.com with x-request-id.
+client_side_errors:
+  - name: TenantContextError
+    detail: Raised locally when an operation needs a tenant and no tenant context is set.
+  - name: ProfileNotFoundError
+    detail: Raised locally when the named ~/.day2/config profile does not exist.
+error_count: 8
+cli_exit_codes:
+  note: day2_cli/utils/exit_codes.py defines CLI exit codes; not reproduced here.

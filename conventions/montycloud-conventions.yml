@@ -1,0 +1,145 @@
+generated: '2026-08-26'
+method: derived
+source: pypi:day2@0.5.0 (day2/client/base.py, day2/client/config.py, day2/resources/*.py, day2/models/*.py)
+note: >-
+  Derived from MontyCloud's own published Python SDK, which is the only machine-readable
+  description of the DAY2 API MontyCloud puts in public. No public OpenAPI exists and the
+  developer reference at developer.montycloud.com is behind a GitHub organization login.
+base_url: https://api.montycloud.com/day2/api
+versioning:
+  style: path
+  segment: /{version}
+  current: v1
+  also_supported: v2
+  detail: >-
+    The SDK composes {base_url}/{api_version} and validates api_version against the literal set
+    ["v1","v2"]; v1 is the default and v2 is selectable per call. There is no Accept-header or
+    query-parameter versioning.
+authentication:
+  style: paired API key + secret in headers
+  headers: [x-api-key, Authorization, x-tenant-id]
+  detail: see authentication/montycloud-authentication.yml
+content_types:
+  request: application/json
+  response: application/json
+tenancy:
+  model: explicit multi-tenant
+  path_prefix: /tenants/{tenant_id}/...
+  header: x-tenant-id
+  detail: >-
+    Nearly every resource path is nested under a tenant. Session-level tenant context can be set,
+    switched and cleared; the SDK raises TenantContextError when an operation needs a tenant and
+    none is in scope. Records in MontyCloud's own datastores carry tenant id and customer id.
+pagination:
+  style: page-number
+  request_params:
+    - name: Page
+      note: 1-based page number
+    - name: PageSize
+      note: items per page
+  response_fields:
+    - name: PageNumber
+      note: the page returned
+    - name: HasMore
+      note: boolean, whether further pages exist
+  cursor: false
+  detail: >-
+    Page/PageSize in the query string, PageNumber/HasMore in the response envelope. No cursor or
+    next-token pagination anywhere in the SDK.
+filtering_and_sorting:
+  query_params_observed:
+    - CloudProvider
+    - AccountNumber
+    - AccountNumbers
+    - RegionCode
+    - RegionCodes
+    - ResourceId
+    - ResourceName
+    - Environments
+    - Projects
+    - SortBy
+    - SortOrder
+  detail: Query parameters are PascalCase, matching the AWS-style casing of the response payloads.
+field_naming:
+  wire: PascalCase (e.g. Name, Description, OwnerId, PageSize, HasMore)
+  sdk: snake_case, mapped with Pydantic field aliases
+  extensibility: models are declared extra="allow", so unknown server fields are preserved
+request_id_tracing:
+  header: x-request-id
+  direction: response
+  detail: >-
+    The SDK reads x-request-id off every response and attaches it to each raised exception, so a
+    failed call always carries a correlatable id.
+error_envelope:
+  shape: '{"Message": "<human readable message>"}'
+  problem_json: false
+  rfc9457: false
+  detail: >-
+    Errors are a plain JSON object with a single `Message` key; the tenant mark-for-deletion path
+    additionally returns a `Prerequisites` object on 400. Not RFC 9457 problem+json. Full mapping
+    in errors/montycloud-error-codes.yml.
+retries:
+  client_side: true
+  strategy: exponential backoff (tenacity)
+  defaults:
+    max_retries: 3
+    backoff_factor: 1.0
+    min_delay_seconds: 2.0
+    max_delay_seconds: 10.0
+    timeout_seconds: 30
+  detail: >-
+    Client-side retry defaults published in the SDK's Config dataclass. Server-side Retry-After
+    handling is not implemented and no rate-limit headers are read — see
+    rate-limits/montycloud-rate-limits.yml.
+idempotency:
+  supported: unknown
+  header: null
+  detail: >-
+    No idempotency key, request-token or replay-safety mechanism appears anywhere in MontyCloud's
+    published SDK, CLI or public documentation. Creates (create_tenant, create_user,
+    create_assessment, create_schedule) send no client-supplied token, so a retried POST is not
+    provably safe. Recorded as undocumented, not as absent — and deliberately NOT wired as a
+    canonical Idempotency pointer, because there is no support to point at.
+dry_run_mode:
+  supported: false
+  detail: No preview/dry-run/validate-only parameter exists on any write operation in the SDK.
+reversibility:
+  grade: documented
+  reversal_available: false
+  detail: >-
+    MontyCloud publishes no reversal operation on any write surface — there is no cancel, undo,
+    restore, rollback or reinstate call in the SDK or CLI. What it does publish, plainly, is that
+    its most consequential write is irreversible, which is the fact an agent needs before acting.
+  write_surfaces:
+    - operation: mark_for_deletion (DELETE /tenants/{tenant_id})
+      cli: day2 tenant mark-for-deletion
+      reversal: none
+      window: none
+      statement: >-
+        "Tenants that are marked for deletion are not recoverable." Potentially sensitive data is
+        deleted immediately on marking, and all customer access is removed during offboarding.
+        Guarded by prerequisites rather than by a grace period: all Accounts, Users and SSO
+        configurations must be removed first, and a 400 response enumerates the failing
+        prerequisites.
+      docs: https://support.montycloud.com/support/solutions/articles/62000237759-mark-a-tenant-for-deletion
+    - operation: delete_schedule (DELETE /tenants/{tenant_id}/assessments/{assessment_id}/schedules/{schedule_id})
+      reversal: none published
+      window: none published
+      note: >-
+        Recreating a schedule is possible but is a new resource, not a restore; MontyCloud states
+        no retention or undelete window.
+    - operation: delete_reports (DELETE /tenants/{tenant_id}/reports/)
+      reversal: none published
+      window: none published
+    - operation: connect_regions (POST /tenants/{tenant_id}/accounts/{account_id}/connect-regions)
+      reversal: none published in the API
+      note: Region disconnection is a console/offboarding flow, not an API operation.
+  never_assert_note: >-
+    No recovery window is asserted anywhere in this block. MontyCloud states none, so none is
+    recorded.
+cross_references:
+  authentication: authentication/montycloud-authentication.yml
+  errors: errors/montycloud-error-codes.yml
+  lifecycle: lifecycle/montycloud-lifecycle.yml
+  rate_limits: rate-limits/montycloud-rate-limits.yml
+  data_model: data-model/montycloud-data-model.yml

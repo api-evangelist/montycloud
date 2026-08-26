@@ -1,0 +1,142 @@
+generated: '2026-08-26'
+method: searched
+source: https://montycloud.com/trust-center/
+note: >-
+  Compliance claims read from MontyCloud's own Trust Center and MCP Server Security Statement.
+  Protocol conformance is asserted only where a fetched artifact or a probed response demonstrates
+  it. Nothing is claimed for the DAY2 REST API's design conventions, because MontyCloud publishes
+  no contract for it.
+standards:
+  - id: soc2-type-ii
+    conforms: true
+    evidence: >-
+      "MontyCloud is SOC 2 Type II compliant, audited in accordance with AICPA standards for SOC
+      for Service Organizations (SSAE 18)", covering Security, Availability and Confidentiality
+      Trust Service Criteria over an extended observation period. Report available under mutual NDA.
+    source: https://montycloud.com/trust-center/
+  - id: gdpr
+    conforms: true
+    evidence: >-
+      "MontyCloud is GDPR compliant, aligned with the requirements set forth by the General Data
+      Protection Regulation (EU) 2016/679." Data subject rights supported for EU, EEA and UK.
+    source: https://montycloud.com/trust-center/
+  - id: us-state-privacy
+    conforms: true
+    evidence: >-
+      Trust Center states support for data subject rights under the UK Data Protection Act 2018 and
+      US state privacy laws including California, Colorado, Connecticut, Texas and Virginia.
+    source: https://montycloud.com/trust-center/
+  - id: pci-dss
+    conforms: false
+    evidence: >-
+      Explicitly out of scope — "the MontyCloud platform does not collect payment information and
+      is PCI DSS out-of-scope". The underlying AWS data centers hold PCI DSS Level 1, which is
+      inherited infrastructure compliance, not MontyCloud's own.
+    source: https://montycloud.com/trust-center/
+  - id: iso-27001
+    conforms: inherited
+    evidence: >-
+      Claimed for the AWS data centers the platform runs in, not for MontyCloud as an organization.
+    source: https://montycloud.com/trust-center/
+  - id: penetration-testing
+    conforms: true
+    evidence: >-
+      Regular third-party penetration testing; summaries available to customers under NDA via
+      infosec@montycloud.com.
+    source: https://montycloud.com/trust-center/
+  - id: saml2
+    conforms: true
+    evidence: >-
+      DAY2 supports SSO via SAML 2.0 and Azure Active Directory, with published service-provider
+      SAML 2.0 metadata and domain verification.
+    source: https://support.montycloud.com/support/solutions/articles/62000206238-how-to-use-service-provider-saml-2-0-metadata
+  - id: oauth2
+    conforms: partial
+    evidence: >-
+      The DAY2 product API does NOT use OAuth — it uses a paired API key and secret. OAuth 2.0
+      appears only on the montycloud.com marketing site, whose WordPress MCP plugin serves an
+      RFC 8414 authorization-server metadata document (authorization_code + refresh_token, PKCE
+      S256, dynamic client registration, scope "mcp").
+    source: well-known/montycloud-oauth-authorization-server.json
+  - id: rfc8414
+    conforms: true
+    evidence: >-
+      https://montycloud.com/.well-known/oauth-authorization-server returned HTTP 200 with a valid
+      OAuth 2.0 Authorization Server Metadata document on 2026-08-26. Saved verbatim.
+    source: well-known/montycloud-oauth-authorization-server.json
+  - id: rfc9728
+    conforms: true
+    evidence: >-
+      https://montycloud.com/.well-known/oauth-protected-resource returned HTTP 200 with a valid
+      OAuth 2.0 Protected Resource Metadata document on 2026-08-26. Saved verbatim.
+    source: well-known/montycloud-oauth-protected-resource.json
+  - id: rfc9457
+    conforms: false
+    evidence: >-
+      DAY2 API errors are a vendor JSON envelope {"Message": "..."}, not application/problem+json.
+    source: errors/montycloud-error-codes.yml
+  - id: rfc9116
+    conforms: false
+    evidence: /.well-known/security.txt returns 404 on montycloud.com and support.montycloud.com.
+    source: well-known/montycloud-well-known.yml
+  - id: idempotency
+    conforms: false
+    evidence: No idempotency key or replay-safety mechanism in the published SDK, CLI or docs.
+    source: conventions/montycloud-conventions.yml
+  - id: pagination
+    conforms: true
+    evidence: Page/PageSize request params with PageNumber/HasMore response fields across all list operations.
+    source: conventions/montycloud-conventions.yml
+domain_standards:
+  - id: model-context-protocol
+    version: '2025-06-18'
+    conforms: claimed
+    evidence: >-
+      "The MCP server is designed for compliance with the MCP specifications (MCP Spec
+      2025-06-18)", using the streamable HTTP transport. The contract itself could not be read —
+      an anonymous tools/list POST to https://api.montycloud.com/mcp returns HTTP 401 — so this is
+      MontyCloud's stated conformance, corroborated by a live JSON-RPC-shaped 401, not a verified
+      handshake.
+    source: https://montycloud.com/mcp-server-security-statement/
+    spec_location: https://api.montycloud.com/mcp
+  - id: aws-well-architected-framework
+    conforms: true
+    evidence: >-
+      The DAY2 API exposes the AWS Well-Architected Framework as a first-class contract surface,
+      not as marketing language: /tenants/{tenant_id}/assessments carries lens selection ("AWS
+      Well-Architected Framework"), the six-pillar question set
+      (/assessments/{id}/questions/{question_id} keyed on pillars such as operational-excellence),
+      answer submission, findings, milestones-style scheduling and report generation. MontyCloud is
+      an AWS Well-Architected Partner Program member with the AWS Cloud Operations Software
+      Competency and AWS Built-in Competency, and advertises 500+ Well-Architected checks. A
+      consumer who already speaks WAFR integrates without a bespoke connector.
+    source: pypi:day2@0.5.0 (day2/resources/assessment.py) + https://montycloud.com/trust-center/
+    also: https://montycloud.com/technology-partners/aws/wafr/
+  - id: aws-well-architected-framework-azure-lens
+    conforms: true
+    evidence: >-
+      A parallel Azure WAFR surface exists at /tenants/{tenant_id}/azure/azure-wafr/assessments,
+      extending the same assessment model to Azure.
+    source: pypi:day2@0.5.0 (day2/resources/azure_assessment.py)
+  - id: aws-migration-acceleration-program
+    conforms: true
+    evidence: >-
+      MAP project tracking is modelled directly in the API: /tenants/{tenant_id}/map-projects with
+      per-project resources and services, matching AWS MAP reporting requirements.
+    source: pypi:day2@0.5.0 (day2/resources/map_project.py)
+  - id: aws-billing-conductor
+    conforms: true
+    evidence: >-
+      DAY2 integrates with AWS Billing Conductor for MSP billing; a 19-article support section
+      documents the integration, and the API exposes cost by charge type.
+    source: https://support.montycloud.com/support/solutions
+certifications:
+  - SOC 2 Type II
+  - GDPR
+  - AWS Cloud Operations Software Competency
+  - AWS Built-in Competency
+  - AWS Well-Architected Partner Program
+third_party_verification:
+  platform: TrustCloud
+  detail: MontyCloud's compliance program and controls are independently verified and published on TrustCloud.
+  source: https://montycloud.com/trust-center/

@@ -1,0 +1,77 @@
+generated: '2026-08-26'
+method: searched
+source: https://pypi.org/project/day2/
+name: day2
+summary: >-
+  MontyCloud ships a first-party CLI named `day2`, bundled inside the `day2` Python SDK
+  distribution on PyPI (the `day2_cli` package). It is a Click-based command tree that mirrors the
+  DAY2 REST API resource-for-resource, with profile-based credential storage in ~/.day2/config.
+version: 0.5.0
+published: '2026-07-16'
+requires: Python >= 3.11
+install:
+  - method: pip
+    command: pip install day2
+configuration:
+  command: day2 auth configure --api-key <API_KEY> --api-secret-key <API_SECRET_KEY>
+  env:
+    - DAY2_API_KEY
+    - DAY2_API_SECRET_KEY
+    - DAY2_PROFILE
+  config_file: ~/.day2/config
+  output_formats:
+    - table
+    - json
+command_groups:
+  - group: auth
+    commands: [configure, whoami, login, check, cache, logout, clear]
+  - group: profile
+    commands: [create, update, delete, list, current, use, show]
+  - group: tenant
+    commands: [list, get, list-accounts, list-categories, create, mark-for-deletion]
+  - group: user
+    commands: [list, create]
+  - group: role
+    commands: [list]
+  - group: account
+    commands: [generate-onboarding-template, list, list-region-status, connect-regions, count]
+  - group: azure-account
+    commands: [generate-onboarding-command]
+  - group: resource
+    commands: [list-resource-types, list-regions, get-inventory-summary, list]
+  - group: assessment
+    commands: [list, get, create, questions, question, answer, findings, run, generate-report,
+               list-across-tenants, create-schedule, update-schedule, update-schedule-status,
+               list-schedules, get-schedule, delete-schedule]
+  - group: azure-assessment
+    commands: [list, create, findings]
+  - group: bot
+    commands: [list-compliance-resource-types, list-compliance-policy-groups, list-compliance-findings]
+  - group: cost
+    commands: [get-cost-by-charge-type]
+  - group: project
+    commands: [list, list-requests]
+  - group: map-project
+    commands: [list, get, list-services, list-resources]
+  - group: report
+    commands: [list, get-details, get, delete]
+command_count: 60
+key_flows:
+  - name: Configure credentials and confirm identity
+    steps: ["day2 auth configure --api-key <KEY> --api-secret-key <SECRET>", "day2 auth whoami"]
+  - name: List tenants and inspect one
+    steps: ["day2 tenant list", "day2 tenant get <tenant-id>"]
+  - name: Run a Well-Architected Framework Review
+    steps:
+      - day2 assessment create <tenant-id> --name "<name>" --review-owner <email> --scope '{"AccountId":"<acct>"}' --lenses "AWS Well-Architected Framework"
+      - day2 assessment run <tenant-id> <assessment-id>
+      - day2 assessment findings <tenant-id> <assessment-id>
+      - day2 assessment generate-report <tenant-id> <assessment-id>
+  - name: Inventory a tenant estate
+    steps: ["day2 resource list-regions <tenant-id>", "day2 resource get-inventory-summary <tenant-id>", "day2 resource list <tenant-id>"]
+note: >-
+  Command surface read from the published 0.5.0 wheel (day2_cli/commands/*.py) on PyPI, not from a
+  docs page — MontyCloud publishes no public CLI reference. `day2_cli/commands/tenant_docs_cli.py`
+  is marked in-source as a backward-compatibility wrapper "to be removed later after deprecation
+  period", the only deprecation signal MontyCloud publishes anywhere.
+binary_distribution: packages/montycloud-packages.yml

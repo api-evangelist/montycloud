@@ -1,0 +1,39 @@
+generated: '2026-08-26'
+method: searched
+source: https://montycloud.com/mcp-server-security-statement/
+limit_count: 0
+note: >-
+  MontyCloud confirms in prose that rate limiting is enforced ("Rate limiting is implemented on API
+  requests as a control against certain usage patterns", MCP Server Security Statement, which also
+  says the MCP server is subject to the same infrastructure controls as the core API services) but
+  publishes no numbers, no windows, no per-plan quotas and no response-header contract anywhere
+  public. The support knowledge base has no rate-limit article and the developer reference at
+  developer.montycloud.com is behind a GitHub organization login. limit_count is therefore an
+  honest 0: limits exist, published limits do not.
+enforced: true
+published: false
+limits: []
+exhaustion:
+  status: 429
+  evidence: >-
+    MontyCloud's own `day2` SDK 0.5.0 maps HTTP 429 to a dedicated RateLimitError, so 429 is the
+    documented exhaustion signal even though the threshold is not published.
+  source: pypi:day2@0.5.0 (day2/exceptions.py, day2/client/base.py)
+response_headers:
+  observed: none
+  detail: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header is read or documented by the SDK, and the
+    API host returns 403/401 to every anonymous request, so no live response could be inspected
+    for headers. An agent cannot currently learn its remaining budget from the runtime signal.
+client_backoff:
+  strategy: exponential
+  attempts: 3
+  min_delay_seconds: 2.0
+  max_delay_seconds: 10.0
+  backoff_factor: 1.0
+  source: pypi:day2@0.5.0 (day2/client/config.py)
+  note: Client-side defaults only; not a server contract.
+enforcement_layer: AWS API Gateway throttling plus a WAF
+gap: >-
+  Publishing the throttle values and emitting RateLimit-* / Retry-After headers would be the single
+  cheapest agent-readiness improvement available to MontyCloud on this surface.

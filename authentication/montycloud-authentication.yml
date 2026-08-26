@@ -1,0 +1,91 @@
+generated: '2026-08-26'
+method: derived
+source: >-
+  pypi:day2@0.5.0 (day2/client/base.py, day2/auth/credentials.py) +
+  https://montycloud.com/mcp-server-security-statement/ + https://montycloud.com/trust-center/
+note: >-
+  MontyCloud publishes no public OpenAPI and no public authentication reference page — the
+  developer docs at developer.montycloud.com are a private GitHub Pages site that 302s to a GitHub
+  organization login. This profile is derived from MontyCloud's own published Python SDK
+  (`day2` 0.5.0 on PyPI) and corroborated by two first-party prose documents: the MCP Server
+  Security Statement and the Trust Center.
+summary: >-
+  Paired-secret API authentication. Every DAY2 API request carries an API key in `x-api-key` and
+  the API secret key in `Authorization`; tenant scope is selected per request with `x-tenant-id`.
+  There is no OAuth 2.0 flow, no bearer token exchange, and no published scope vocabulary on the
+  product API — authorization is DAY2 platform RBAC attached to the user the key was minted for.
+schemes:
+  - id: apiKeyHeader
+    type: apiKey
+    in: header
+    name: x-api-key
+    required: true
+    description: API key issued to a user inside the DAY2 platform.
+  - id: apiSecretHeader
+    type: apiKey
+    in: header
+    name: Authorization
+    required: true
+    description: >-
+      The API secret key, sent raw in the Authorization header. It is NOT an RFC 6750 bearer token
+      and carries no scheme prefix — the SDK assigns the secret directly
+      (headers["Authorization"] = credentials.secret_key).
+  - id: tenantContext
+    type: apiKey
+    in: header
+    name: x-tenant-id
+    required: false
+    description: >-
+      Selects the tenant a request executes against. Set by Session.set_tenant() / the CLI tenant
+      context. Omitting it uses the caller's default tenant; most resource paths also take the
+      tenant id as a path parameter.
+credential_sources:
+  - inline constructor arguments (api_key, api_secret_key)
+  - environment variables DAY2_API_KEY and DAY2_API_SECRET_KEY
+  - profile config file ~/.day2/config, written by `day2 auth configure`
+identity_provider:
+  service: Amazon Cognito
+  gateway: AWS API Gateway
+  source: https://montycloud.com/mcp-server-security-statement/
+  note: >-
+    MontyCloud states the same API Gateway + Cognito framework fronts both the core API services
+    and the CloudOps MCP Server, and that MCP access uses the same API key + secret key pair.
+authorization:
+  model: rbac
+  scope_vocabulary: none-published
+  detail: >-
+    Permissions granted by an API key are those of the DAY2 user identity it was generated for,
+    under a stated principle of least privilege. RBAC governs every platform feature and enforces
+    tenant isolation; MontyCloud publishes no OAuth scope list, so scopes/ is intentionally absent
+    from this repo rather than fabricated.
+  source: https://montycloud.com/mcp-server-security-statement/
+end_user_sso:
+  supported: true
+  protocols:
+    - SAML 2.0
+    - Azure Active Directory / Entra ID
+  scope: DAY2 platform console sign-in (app.montycloud.com), not API credentials
+  docs: https://support.montycloud.com/support/solutions/articles/62000206236-single-sign-on-in-day2-overview-
+cloud_account_trust:
+  mechanism: AWS cross-account IAM role with a unique per-customer external ID
+  detail: >-
+    MontyCloud accesses customer AWS accounts through a scoped cross-account IAM role limited to
+    resource metadata (names, tag key/values) and CloudTrail log streams. The role is assumable
+    only by MontyCloud's designated AWS account IDs. No MontyCloud employee holds direct customer
+    account access. Temporary IAM access keys are held in application memory only and are never
+    stored or logged.
+  source: https://montycloud.com/trust-center/
+  docs: https://support.montycloud.com/support/solutions/articles/62000213248-day2-aws-iam-permissions
+transport:
+  tls_required: true
+  note: All data in transit encrypted with TLS; at rest with AES-256 (Trust Center).
+failure_modes:
+  - status: 401
+    meaning: authentication failed (SDK raises AuthenticationError)
+  - status: 403
+    meaning: authenticated but not permitted (SDK also raises AuthenticationError)
+mcp_authentication:
+  endpoint: https://api.montycloud.com/mcp
+  model: api-key-and-secret
+  observed: anonymous tools/list POST returns HTTP 401 {"message":"Unauthorized"}
+  probed: '2026-08-26'

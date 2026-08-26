@@ -1,0 +1,64 @@
+generated: '2026-08-26'
+method: searched
+source: https://aws.amazon.com/marketplace/pp/prodview-tnploss6y5ew2
+plan_count: 3
+note: >-
+  MontyCloud's own pricing page publishes no tiers, no list price and no packages — it is a
+  custom-quote form ("MontyCloud pricing is tailored to the unique characteristics of your cloud
+  environment... no generic packages"). The only publicly priced surface is the MontyCloud DAY2
+  listing on AWS Marketplace, whose contract dimensions are recorded below. These are billing
+  dimensions that bill independently, not stacked feature tiers, and none of them is an API plan:
+  no plan anywhere ties to API quotas, rate limits or MCP access.
+direct_pricing:
+  model: contact-sales
+  url: https://montycloud.com/pricing/
+  http_status: 200
+  detail: >-
+    Two-step qualification form (clouds used, MSP/SI status, contact details). No price, currency,
+    quota or overage is stated.
+marketplace:
+  channel: AWS Marketplace
+  url: https://aws.amazon.com/marketplace/pp/prodview-tnploss6y5ew2
+  product: MontyCloud DAY2
+  contract_durations:
+    - term: 1 month
+    - term: 12 months
+      note: stated savings of up to 17% versus the 1-month contract
+plans:
+  - name: DAY2 Free Trial
+    price: 0.00
+    currency: USD
+    billing_period: month
+    included: 14-day full access trial of the DAY2 platform
+    overage: null
+    limits: 14-day duration
+  - name: Discovery Classification
+    price: 0.00
+    currency: USD
+    billing_period: month
+    included: Continuous visibility into cloud resources across accounts and regions
+    overage: null
+    limits: null
+  - name: Well-Managed Servers
+    price: 20.00
+    currency: USD
+    billing_period: month
+    unit: per server workload
+    included: Monitor, manage and operate server workloads on-premise or in the cloud
+    overage: null
+    limits: null
+api_plans:
+  published: false
+  detail: >-
+    Neither the direct nor the marketplace pricing mentions API calls, API keys, rate limits or MCP
+    server access as a priced or metered dimension.
+other_entry_points:
+  - name: MSP free trial
+    url: https://montycloud.com/msp-free-trial/
+  - name: DAY2 trial start
+    url: https://go.montycloud.com/start/
+  - name: Request a demo
+    url: https://montycloud.com/demo/
+  - name: MontyCloud AI early access
+    url: https://montycloud.com/platform/montycloud-ai/
+    note: MontyCloud AI / CloudOps Assistant is a limited-partner preview, not generally available.

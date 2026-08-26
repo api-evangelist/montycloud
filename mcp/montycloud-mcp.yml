@@ -1,0 +1,83 @@
+generated: '2026-08-26'
+method: probed
+source: https://montycloud.com/mcp-server-security-statement/
+name: MontyCloud CloudOps MCP Server
+status: published
+summary: >-
+  MontyCloud ships a first-party, cloud-hosted MCP server for the DAY2 platform, marketed as the
+  "CloudOps MCP Server" and surfaced in the product as MCP Integrations (Beta) inside the CloudOps
+  Assistant. MontyCloud's own security statement is explicit that it is a remote service and that
+  no local stdio server code runs in customer environments.
+deployment:
+  mode: remote
+  endpoint: https://api.montycloud.com/mcp
+  auth: api-key
+  verified: probed
+  note: >-
+    An anonymous JSON-RPC POST of {"jsonrpc":"2.0","id":1,"method":"tools/list"} to
+    https://api.montycloud.com/mcp returned HTTP 401 {"message":"Unauthorized"} on 2026-08-26 —
+    the route exists and is auth-gated. The same POST to /v1/mcp returned 403 "Missing
+    Authentication Token" and to /api/mcp returned 403 "Forbidden", so /mcp is the live path. The
+    endpoint host is taken from MontyCloud's published MCP Server Security Statement, which names
+    "the api.montycloud.com endpoint"; the /mcp path was established by probe, not by guessing a
+    plausible URL.
+transport: streamable-http
+spec_version: '2025-06-18'
+authentication:
+  model: api-key-and-secret
+  detail: >-
+    API Key + Secret Key pair issued per user inside the DAY2 platform. AWS API Gateway routes the
+    request and Amazon Cognito is the identity provider. Permissions are inherited from the DAY2
+    RBAC role of the user the key was minted for (least privilege, tenant-scoped).
+  source: https://montycloud.com/mcp-server-security-statement/
+controls:
+  tls: true
+  rate_limiting: true
+  waf: true
+  source: https://montycloud.com/mcp-server-security-statement/
+tools:
+  status: gated
+  count: null
+  note: >-
+    tools/list requires authentication, so the real tool set and inputSchemas could not be read.
+    MontyCloud publishes no llms.txt tool list either (montycloud.com/llms.txt is a Yoast SEO site
+    map of marketing pages, not an MCP manifest). No candidate tool list is derived here: there is
+    no public OpenAPI to derive one from, and inventing tool names would misrepresent the server.
+    Establishing the tool surface requires authenticated introspection with a DAY2 API key.
+capabilities_documented:
+  - name: Conversations
+    note: natural-language interrogation of the cloud estate, output as text/Markdown/HTML
+  - name: Intelligent Apps
+    note: no-code CloudOps apps (compliance checks, optimization, governance) hosted by MontyCloud
+  - name: Workflows (Beta)
+    note: multi-tenant automation such as onboarding and Well-Architected Reviews
+  - name: MCP Integrations (Beta)
+    note: cross-platform actions against AWS, JIRA and HubSpot through the CloudOps MCP Server
+capabilities_source: https://montycloud.com/platform/montycloud-ai/
+availability:
+  note: >-
+    MontyCloud AI and the CloudOps Assistant are described on the product page as a Preview /
+    early-access program limited to selected partners; third-party integration docs (DarcyIQ)
+    state MCP server access must be enabled by MontyCloud support.
+  source: https://montycloud.com/platform/montycloud-ai/
+evidence:
+  - url: https://api.montycloud.com/mcp
+    method: POST tools/list
+    http_status: 401
+    body: '{"message":"Unauthorized"}'
+    fetched: '2026-08-26'
+  - url: https://montycloud.com/mcp-server-security-statement/
+    http_status: 200
+    fetched: '2026-08-26'
+  - url: https://montycloud.com/platform/montycloud-ai/
+    http_status: 200
+    fetched: '2026-08-26'
+other_mcp_surfaces:
+  - endpoint: https://montycloud.com/wp-json/mcp/v1/http
+    owner: montycloud.com marketing site (WordPress AI Engine plugin)
+    auth: oauth
+    http_status: 401
+    note: >-
+      Discovered via /.well-known/oauth-protected-resource on montycloud.com. This is the
+      WordPress plugin's MCP server over the marketing site's content, NOT the DAY2 product MCP
+      server. Recorded for completeness; it is not the provider's product agent surface.

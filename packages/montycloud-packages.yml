@@ -1,0 +1,69 @@
+generated: '2026-08-26'
+method: searched
+source: https://pypi.org/project/day2/
+note: >-
+  Registry metadata read from pypi.org/pypi/<pkg>/json on 2026-08-26. npm, Maven Central, NuGet,
+  pkg.go.dev, RubyGems, Packagist and crates.io were checked for MontyCloud/DAY2 client libraries
+  and returned nothing first-party. Note that the PyPI package named `moya` is Will McGugan's
+  unrelated web framework, NOT MontyCloud's Moya — MontyCloud publishes theirs as `moya-ai`.
+packages:
+  - language: python
+    registry: pypi
+    name: day2
+    url: https://pypi.org/project/day2/
+    install: pip install day2
+    official: true
+    version: 0.5.0
+    published: '2026-07-16'
+    first_published: '2025-05-12'
+    release_count: 18
+    requires_python: '>=3.11'
+    maintainer_email: info@montycloud.com
+    description: >-
+      MontyCloud DAY2 SDK for Python. AWS-style client factories, API key + API secret key auth,
+      multi-tenant session context, Pydantic-typed models, retry logic, and a bundled `day2` CLI.
+    ships_cli: true
+    note: >-
+      Actively maintained — 18 releases between 2025-05-12 and 2026-07-16, the most recent six
+      weeks before this pass. First-party: the PyPI author_email is
+      "MontyCloud <info@montycloud.com>" and the bundled LICENSE is "Copyright (c) 2025 MontyCloud".
+  - language: python
+    registry: pypi
+    name: moya-ai
+    url: https://pypi.org/project/moya-ai/
+    install: pip install moya-ai
+    official: true
+    version: 0.1.5
+    published: '2025-03-15'
+    release_count: 3
+    maintainer_email: kannan@montycloud.com
+    source_code: https://github.com/montycloud/moya
+    description: >-
+      Reference implementation of Moya, MontyCloud's open-source meta-orchestration framework for
+      multi-agent systems.
+    note: >-
+      First-party (author_email "MontyCloud <kannan@montycloud.com>", MIT, Copyright 2025
+      MontyCloud) but it is an agent-orchestration framework, NOT a client for the DAY2 API. Last
+      PyPI release 2025-03-15 — the GitHub repo was still being pushed to on 2026-07-11, so the
+      published package trails the source by more than a year.
+sdk_count: 1
+sdk_note: >-
+  One official API client library (`day2`, Python). MontyCloud publishes no JavaScript, Go, Java,
+  .NET, Ruby or PHP SDK.
+registries_checked:
+  - registry: pypi
+    result: hit (day2, moya-ai)
+  - registry: npm
+    result: no first-party MontyCloud/DAY2 package found
+  - registry: maven-central
+    result: none
+  - registry: nuget
+    result: none
+  - registry: pkg.go.dev
+    result: none
+  - registry: rubygems
+    result: none
+  - registry: packagist
+    result: none
+  - registry: crates.io
+    result: none

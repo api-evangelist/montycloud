@@ -1,0 +1,115 @@
+generated: '2026-08-26'
+method: searched
+source: https://montycloud.com/ + https://support.montycloud.com/support/solutions + pypi:day2@0.5.0
+summary: >-
+  MontyCloud publishes almost nothing about the operational lifecycle of the DAY2 API. There is no
+  public changelog or release-notes page, no status page, no deprecation policy, no sunset-header
+  contract and no published SLA. What can be established is the API versioning scheme (from the
+  SDK) and the release cadence of the SDK itself.
+versioning:
+  scheme: path segment
+  current: v1
+  supported: [v1, v2]
+  base: https://api.montycloud.com/day2/api/{version}
+  source: pypi:day2@0.5.0 (day2/client/config.py — api_version validated against ["v1","v2"])
+  note: >-
+    v2 is selectable per call in the SDK but MontyCloud documents nothing about what it contains,
+    when v1 sunsets, or how the two differ.
+status_page:
+  published: false
+  probed:
+    - url: https://status.montycloud.com/
+      result: DNS does not resolve
+      checked: '2026-08-26'
+  note: >-
+    No status.montycloud.com, no status link in the site footer or sitemap, and no status article
+    in the support knowledge base. No StatusPage pointer is emitted.
+deprecation_policy:
+  published: false
+  sunset_header: unknown
+  deprecation_header: unknown
+  rfc8594: unknown
+  observed_signal:
+    - artifact: pypi:day2@0.5.0
+      file: day2_cli/commands/tenant_docs_cli.py
+      text: >-
+        "Wrapper around tenant commands for backward compatibility in docs. (shall be removed later
+        after deprecation period)"
+      note: >-
+        The only deprecation language MontyCloud publishes anywhere. It concerns a CLI wrapper, not
+        an API operation, and names no date or policy. No Deprecation pointer is emitted.
+sla:
+  published: false
+  note: >-
+    No public SLA. The Trust Center publishes disaster-recovery objectives instead — RPO 24 hours,
+    RTO 6 hours, with regular DR testing — which are recovery targets, not an availability
+    commitment.
+  source: https://montycloud.com/trust-center/
+changelog:
+  published: false
+  probed:
+    - url: https://montycloud.com/page-sitemap.xml
+      status: 200
+      result: no changelog, release-notes or what's-new page in the sitemap
+    - url: https://support.montycloud.com/support/search/solutions?term=release+notes
+      status: 200
+      result: no release-notes article
+  proxy_signal:
+    artifact: pypi:day2
+    releases: 18
+    first: '2025-05-12'
+    latest: '2026-07-16'
+    note: >-
+      The SDK's PyPI release history is the only dated, public record of DAY2 API change. It shows
+      an actively shipping product (0.2.0 to 0.5.0 across 15 months) with no accompanying public
+      changelog.
+support:
+  channel: https://support.montycloud.com/support/home
+  knowledge_base: https://support.montycloud.com/support/solutions
+  in_product: DAY2 platform bug/suggestion form
+  security_contact: security@montycloud.com
+  infosec_contact: infosec@montycloud.com
+  privacy_contact: privacy@montycloud.com
+  response_target: InfoSec team aims to respond to security review requests within 2 business days
+  source: https://montycloud.com/trust-center/
+deprecated_operations: []
+documentation:
+  public_reference:
+    published: false
+    detail: >-
+      There is no public API reference. MontyCloud operates developer.montycloud.com as a PRIVATE
+      GitHub Pages site: an anonymous GET returns HTTP 302 to
+      https://github.com/pages/auth?...&page_id=56842083, i.e. it requires membership of the
+      MontyCloud GitHub organization. The marketing site's page sitemap contains no docs,
+      developer or API page at all. No DeveloperPortal or APIReference pointer is emitted for this
+      repo, because crediting a portal no member of the public can open would be false credit.
+    probed:
+      - url: https://developer.montycloud.com/
+        status: 302
+        location: https://github.com/pages/auth?nonce=...&page_id=56842083&path=Lw
+        checked: '2026-08-26'
+      - url: https://docs.montycloud.com/
+        status: 0
+        result: DNS does not resolve
+        checked: '2026-08-26'
+  public_surfaces:
+    - name: Customer support knowledge base
+      url: https://support.montycloud.com/support/solutions
+      status: 200
+      detail: >-
+        ~100 public Freshdesk articles covering onboarding, tenants, users, SSO, WAFR, bots,
+        patching, reporting and AWS Billing Conductor. Product documentation, not API reference —
+        a search for "API key" returns no credential or endpoint article.
+    - name: MontyCloud DAY2 Python SDK on PyPI
+      url: https://pypi.org/project/day2/
+      status: 200
+      detail: >-
+        The de-facto public API reference. Docstrings on every SDK method carry the description,
+        arguments, return type, raised errors and a worked example, which is why this repo's
+        authentication, conventions, errors and data-model artifacts are derived from it.
+    - name: MCP Server Security Statement
+      url: https://montycloud.com/mcp-server-security-statement/
+      status: 200
+    - name: Trust Center
+      url: https://montycloud.com/trust-center/
+      status: 200

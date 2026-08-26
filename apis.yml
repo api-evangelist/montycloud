@@ -1,23 +1,149 @@
 aid: montycloud
 name: MontyCloud
-description: 'MontyCloud is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  MontyCloud is a Bellevue, Washington software company whose DAY2 platform is a no-code,
+  autonomous CloudOps product for AWS-focused managed service providers and enterprise cloud
+  teams. DAY2 connects to customer AWS (and Azure) accounts through a scoped cross-account IAM
+  role and delivers multi-tenant inventory and discovery, AWS Well-Architected Framework Reviews,
+  compliance and security bots, patching and server management, cost and AWS Billing Conductor
+  reporting, MAP project tracking, blueprints and governance automation. The platform is
+  programmable: MontyCloud publishes a first-party Python SDK and CLI (`day2` on PyPI) against a
+  tenant-scoped REST API at api.montycloud.com, and ships a hosted CloudOps MCP Server so AI
+  agents can drive cloud operations directly. MontyCloud is an AWS Cloud Operations Software
+  Competency and AWS Built-in partner, is SOC 2 Type II audited and GDPR aligned, and also
+  open-sources Moya, a multi-agent orchestration framework.
+image: https://montycloud.com/wp-content/uploads/2025/07/full-color-favicon.svg
 url: https://raw.githubusercontent.com/api-evangelist/montycloud/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-26'
 modified: '2026-08-26'
 tags:
-- Company
-apis: []
+- Cloud
+- Cloud Operations
+- AWS
+- Managed Service Providers
+- Governance
+- Compliance
+- Cost Management
+- Artificial Intelligence
+- Agents
+- Model Context Protocol
+- Multi-Tenant
+- Infrastructure
+apis:
+- aid: montycloud-day2-api
+  name: MontyCloud DAY2 API
+  description: >-
+    The tenant-scoped REST API behind the MontyCloud DAY2 platform. Requests are authenticated with
+    an API key and API secret key issued in the DAY2 platform and are scoped to a tenant via the
+    x-tenant-id header. The surface covers tenants, users, roles, cloud account onboarding and
+    region connection, resource inventory, AWS Well-Architected assessments and schedules, Azure
+    WAFR assessments, compliance bot findings, cost by charge type, MAP projects, projects and
+    reports. MontyCloud publishes no public OpenAPI; the reference lives at
+    developer.montycloud.com, which is a private GitHub Pages site that 302s to a GitHub
+    organization login. The operation surface recorded in this repo is derived from MontyCloud's
+    own published `day2` Python SDK on PyPI.
+  humanURL: https://montycloud.com/platform/day2-platform/
+  baseURL: https://api.montycloud.com/day2/api/v1
+  tags:
+  - Cloud Operations
+  - AWS
+  - Governance
+  - Compliance
+  - Cost Management
+  properties:
+  - type: Authentication
+    url: authentication/montycloud-authentication.yml
+  - type: Conventions
+    url: conventions/montycloud-conventions.yml
+  - type: ErrorCatalog
+    url: errors/montycloud-error-codes.yml
+  - type: DataModel
+    url: data-model/montycloud-data-model.yml
+  - type: Lifecycle
+    url: lifecycle/montycloud-lifecycle.yml
+  - type: RateLimits
+    url: rate-limits/montycloud-rate-limits.yml
+  - type: SDKs
+    url: packages/montycloud-packages.yml
+  - type: CLI
+    url: cli/montycloud-cli.yml
+- aid: montycloud-cloudops-mcp-server
+  name: MontyCloud CloudOps MCP Server
+  description: >-
+    MontyCloud's hosted, remote Model Context Protocol server for the DAY2 platform. MontyCloud's
+    own MCP Server Security Statement places it at the api.montycloud.com endpoint, states it is
+    cloud-hosted rather than a local stdio binary, targets MCP spec 2025-06-18, uses the streamable
+    HTTP transport over TLS, and authenticates with an API key and secret key brokered by AWS API
+    Gateway and Amazon Cognito. An anonymous JSON-RPC tools/list POST to
+    https://api.montycloud.com/mcp returns HTTP 401, confirming the endpoint exists and is
+    auth-gated; the live tool schemas therefore require authenticated introspection.
+  humanURL: https://montycloud.com/platform/montycloud-ai/
+  baseURL: https://api.montycloud.com/mcp
+  tags:
+  - Model Context Protocol
+  - Agents
+  - Artificial Intelligence
+  - Cloud Operations
+  properties:
+  - type: MCPServer
+    url: mcp/montycloud-mcp.yml
+  - type: Security
+    url: https://montycloud.com/mcp-server-security-statement/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: TrustCenter
+  url: security/montycloud-trust-center.yml
+- type: DomainSecurity
+  url: security/montycloud-domain-security.yml
 - type: Website
-  url: https://www.nasdaqprivatemarket.com/
+  url: https://montycloud.com/
+- type: Documentation
+  url: https://support.montycloud.com/support/solutions
+- type: Support
+  url: https://support.montycloud.com/support/home
+- type: Blog
+  url: https://montycloud.com/category/blog/
+- type: BlogRSS
+  url: https://montycloud.com/feed/
+- type: GitHubOrganization
+  url: https://github.com/montycloud
+- type: Pricing
+  url: https://montycloud.com/pricing/
+- type: SignUp
+  url: https://montycloud.com/msp-free-trial/
+- type: Login
+  url: https://app.montycloud.com/login
+- type: TermsOfService
+  url: https://montycloud.com/wp-content/uploads/2025/10/2026.08-MontyCloud-Subscription-Terms.pdf
+- type: PrivacyPolicy
+  url: https://montycloud.com/wp-content/uploads/2025/09/platform-privacy-policy.pdf
+- type: Compliance
+  url: conformance/montycloud-conformance.yml
+- type: Conformance
+  url: conformance/montycloud-conformance.yml
+- type: Security
+  url: https://montycloud.com/data-security-statement/
+- type: VulnerabilityDisclosure
+  url: security/montycloud-vulnerability-disclosure.yml
+- type: Packages
+  url: packages/montycloud-packages.yml
+- type: LLMsTxt
+  url: llms/montycloud-llms.txt
+- type: WellKnown
+  url: well-known/montycloud-well-known.yml
+- type: Plans
+  url: plans/montycloud-plans-pricing.yml
+- type: Newsroom
+  url: https://montycloud.com/company/newsroom/
+x-enrichment:
+  date: '2026-08-26'
+  status: enriched
+  artifacts_added: 18
+  pass: local-v1

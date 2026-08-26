@@ -1,0 +1,83 @@
+generated: '2026-08-26'
+method: searched
+source: https://montycloud.com/.well-known/
+note: >-
+  Probed every MontyCloud host. montycloud.com serves two real RFC 8414 / RFC 9728 documents —
+  they belong to the WordPress AI Engine MCP plugin running on the marketing site
+  (resource_documentation points at meowapps.com/ai-engine), NOT to the DAY2 product API. They are
+  recorded because they were genuinely fetched and saved. api.montycloud.com (AWS API Gateway +
+  WAF) answers 403 {"message":"Forbidden"} to every anonymous /.well-known/ path, so nothing there
+  could be read. app.montycloud.com is a single-page-app catch-all that answers 200 with the same
+  1809-byte HTML shell for every path including a nonsense control — no document was recorded from
+  it. No security.txt is served on any host.
+hosts:
+  - host: https://montycloud.com
+    documents:
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        file: montycloud-oauth-authorization-server.json
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        file: montycloud-oauth-protected-resource.json
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+    soft_404_control:
+      path: /.well-known/this-should-not-exist
+      status: 404
+      note: control returns 404, so the two 200s above are real documents, not a catch-all
+  - host: https://api.montycloud.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 403
+      - path: /.well-known/oauth-authorization-server
+        status: 403
+      - path: /.well-known/oauth-protected-resource
+        status: 403
+      - path: /.well-known/openid-configuration
+        status: 403
+      - path: /.well-known/api-catalog
+        status: 403
+      - path: /.well-known/ai-plugin.json
+        status: 403
+      - path: /.well-known/agent-card.json
+        status: 403
+      - path: /.well-known/agent.json
+        status: 403
+    note: >-
+      AWS API Gateway fronted by a WAF; every anonymous request returns 403 with a 23-byte
+      {"message":"Forbidden"} body. This is a gate, not an absence — the documents may exist to an
+      authenticated caller.
+  - host: https://app.montycloud.com
+    documents: []
+    hit_count: 0
+    soft_404_control:
+      path: /.well-known/this-should-not-exist-control
+      status: 200
+      bytes: 1809
+      note: >-
+        SPA catch-all. Every /.well-known/ path, including a nonsense control, returns HTTP 200
+        with the identical 1809-byte HTML application shell. No document exists here; nothing was
+        saved and no pointer is emitted for this host.
+  - host: https://support.montycloud.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+      - path: /.well-known/agent.json
+        status: 404
+hit_count: 2
+security_txt: false
+agent_card: false
