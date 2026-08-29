@@ -12,6 +12,17 @@ description: >-
   agents can drive cloud operations directly. MontyCloud is an AWS Cloud Operations Software
   Competency and AWS Built-in partner, is SOC 2 Type II audited and GDPR aligned, and also
   open-sources Moya, a multi-agent orchestration framework.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://montycloud.com/wp-content/uploads/2025/07/full-color-favicon.svg
 url: https://raw.githubusercontent.com/api-evangelist/montycloud/refs/heads/main/apis.yml
 x-type: company
