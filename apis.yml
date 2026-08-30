@@ -40,6 +40,19 @@ tags:
 - Cost Management
 - Artificial Intelligence
 - Agents
+- MCP
+- Multi-Tenant
+- Infrastructure
+tags_raw:
+- Cloud
+- Cloud Operations
+- AWS
+- Managed Service Providers
+- Governance
+- Compliance
+- Cost Management
+- Artificial Intelligence
+- Agents
 - Model Context Protocol
 - Multi-Tenant
 - Infrastructure
@@ -94,6 +107,11 @@ apis:
   humanURL: https://montycloud.com/platform/montycloud-ai/
   baseURL: https://api.montycloud.com/mcp
   tags:
+  - MCP
+  - Agents
+  - Artificial Intelligence
+  - Cloud Operations
+  tags_raw:
   - Model Context Protocol
   - Agents
   - Artificial Intelligence

@@ -1,0 +1,21 @@
+{
+  "repo": "montycloud",
+  "feeds": [
+    {
+      "source": "https://support.montycloud.com/support/home",
+      "feed_url": "https://support.montycloud.com/support/home",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
+      "source": "https://montycloud.com/category/blog/",
+      "feed_url": "https://montycloud.com/feed/",
+      "title": "",
+      "saved": 2,
+      "method": "discovered"
+    }
+  ],
+  "post_count": 2,
+  "fetched": "2026-08-30T22:33:40Z"
+}
