@@ -23,6 +23,21 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: true
+  try_now: true
+  public: false
+  label: Freemium (free trial) · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  - rate-limits
+  - security
+  generated: '2026-09-03'
+  method: derived
 image: https://montycloud.com/wp-content/uploads/2025/07/full-color-favicon.svg
 url: https://raw.githubusercontent.com/api-evangelist/montycloud/refs/heads/main/apis.yml
 x-type: company
