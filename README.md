@@ -64,5 +64,116 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-MontyCloud is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://www.nasdaqprivatemarket.com/
+MontyCloud is a Bellevue, Washington software company whose DAY2 platform is a no-code, autonomous CloudOps product for AWS-focused managed service providers and enterprise cloud teams. DAY2 connects to customer AWS (and Azure) accounts through a scoped cross-account IAM role and delivers multi-tenant inventory and discovery, AWS Well-Architected Framework Reviews, compliance and security bots, patching and server management, cost and AWS Billing Conductor reporting, MAP project tracking, blueprints and governance automation. The platform is programmable: MontyCloud publishes a first-party Python SDK and CLI (`day2` on PyPI) against a tenant-scoped REST API at api.montycloud.com, and ships a hosted CloudOps MCP Server so AI agents can drive cloud operations directly. MontyCloud is an AWS Cloud Operations Software Competency and AWS Built-in partner, is SOC 2 Type II audited and GDPR aligned, and also open-sources Moya, a multi-agent orchestration framework.
+
+**Areas:** Cloud · Cloud Operations · AWS · Managed Service Providers · Governance · Compliance · Cost Management · Artificial Intelligence · Agents · MCP · Multi-Tenant · Infrastructure
+
+## MontyCloud on APIs.io
+
+Everything profiled for MontyCloud is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/montycloud/](https://apis.io/providers/montycloud/)** — or go straight to one of the APIs or properties below.
+
+### APIs (2)
+
+- [MontyCloud DAY2 API](https://apis.io/apis/montycloud/montycloud-day2-api/) — The tenant-scoped REST API behind the MontyCloud DAY2 platform. Requests are authenticated with an API key and API secret key issued in the DAY2 platform…
+- [MontyCloud CloudOps MCP Server](https://apis.io/apis/montycloud/montycloud-cloudops-mcp-server/) — MontyCloud's hosted, remote Model Context Protocol server for the DAY2 platform. MontyCloud's own MCP Server Security Statement places it at the…
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [MontyCloud CloudOps MCP Server](https://apis.io/servers/montycloud/montycloud-cloudops-mcp-server/)
+
+#### Security (4)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Montycloud Authentication](https://apis.io/security/montycloud/montycloud-authentication/)
+- [Montycloud Domain Security](https://apis.io/security/montycloud/montycloud-domain-security/)
+- [Montycloud Trust Center](https://apis.io/security/montycloud/montycloud-trust-center/)
+- [Montycloud Vulnerability Disclosure](https://apis.io/security/montycloud/montycloud-vulnerability-disclosure/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Montycloud Plans Pricing](https://apis.io/plans/montycloud/montycloud-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Montycloud Rate Limits](https://apis.io/rate-limits/montycloud/montycloud-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://montycloud.com/)
+- [Documentation](https://support.montycloud.com/support/solutions)
+- [Pricing](https://montycloud.com/pricing/)
+- [Sign up](https://montycloud.com/msp-free-trial/)
+- [Support](https://support.montycloud.com/support/home)
+- [Blog](https://montycloud.com/category/blog/)
+- [Security](https://montycloud.com/data-security-statement/)
+- [Terms of service](https://montycloud.com/wp-content/uploads/2025/10/2026.08-MontyCloud-Subscription-Terms.pdf)
+- [Privacy policy](https://montycloud.com/wp-content/uploads/2025/09/platform-privacy-policy.pdf)
+- [GitHub](https://github.com/montycloud)
+
+## API Evangelist rating
+
+**Kin Score 39.8** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 75.8 |
+| Contract quality | 0.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 13.2 |
+| Developer ergonomics | 42.9 |
+| Access clarity | 85.5 |
+
+**Agent readiness 25.4** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | — |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 32.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/montycloud/](https://apis.io/providers/montycloud/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for MontyCloud: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/montycloud/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
